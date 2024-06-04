@@ -6,6 +6,9 @@
 
         <title>My ToDos</title>
 
+        <!-- TAilwind CSS -->
+        <script src="https://cdn.tailwindcss.com"></script>
+
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
@@ -15,7 +18,7 @@
     </head>
     <body class="antialiased">
         <div id="app">
-            <example-component />
+            <todo />
         </div>
     </body>
 </html>
