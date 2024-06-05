@@ -15,8 +15,21 @@
 
         @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 
+        <style>
+            .bg{
+                position: absolute;
+                height: 100%;
+                width: 100%;
+                background: url("/assets/img/bg1.jpg") no-repeat;
+                background-size: cover;
+                filter: blur(5px);
+                z-index: -1;
+            }
+        </style>
+
     </head>
     <body class="antialiased">
+        <div class="bg"></div>
         <div id="app">
             <todo />
         </div>
