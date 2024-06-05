@@ -7,9 +7,9 @@
 
                     <div class="card-body">
                         <div class="input-group">
-                            <input type="text" placeholder="ToDo.." class="form-control" aria-lable="todo" aria-describedby="todo">
+                            <input type="text" placeholder="ToDo.." class="form-control" aria-lable="todo" aria-describedby="todo" v-model="todo_input">
                             <div class="input-group-append">
-                                <button class="btn bg-teal-500 hover:bg-teal-400 text-white">Add</button>
+                                <button class="btn bg-teal-500 hover:bg-teal-400 text-white" @click="savaTodo()">Add</button>
                             </div>
                         </div>
 
@@ -22,10 +22,12 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Mark</td>
-                                    <td>Otto</td>
-                                    <td>@mdo</td>
+                                <tr v-for="(todo,index) in todos" :key="index">
+                                    <td>{{ ++index }}</td>
+                                    <td>{{ todo.name }}</td>
+                                    <td>
+                                        <button class="btn bg-red-500 hover:bg-red-400 text-white"> Delete </button>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -39,8 +41,28 @@
 
 <script>
     export default {
+        data() {
+            return {
+                todos:[],
+                api: 'http://localhost:8000/api/todos',
+                todo_input: ''
+            }
+        },
         mounted() {
-            console.log('Component mounted.')
+            this.axios.get(this.api).then((response) => {
+                this.todos = response.data;
+            });
+        },
+        methods:{
+            savaTodo() {
+                if(this.todo_input.length > 0){
+                    let data = {'name': this.todo_input}
+                    this.axios.post(this.api,data).then((response) => {
+                        this.todos.push(response.data);
+                    });
+                }
+            }
         }
+
     }
 </script>

@@ -7,6 +7,9 @@
 import './bootstrap';
 import { createApp } from 'vue';
 
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+
 /**
  * Next, we will create a fresh Vue application instance. You may then begin
  * registering components with the application instance so they are ready
@@ -17,6 +20,7 @@ const app = createApp({});
 
 import Todo from './components/Todo.vue';
 app.component('todo', Todo);
+app.use(VueAxios, axios);
 
 /**
  * The following block of code may be used to automatically register your
