@@ -9,9 +9,12 @@
                         <div class="input-group">
                             <input type="text" placeholder="ToDo.." class="form-control" aria-lable="todo" aria-describedby="todo" v-model="todo_input">
                             <div class="input-group-append">
-                                <button class="btn bg-teal-500 hover:bg-teal-400 text-white" @click="savaTodo()">Add</button>
+                                <button v-if="!edit_todo_id" class="btn bg-teal-500 hover:bg-teal-400 text-white" @click="savaTodo()">Add</button>
+                                <button v-else class="btn bg-teal-500 hover:bg-teal-400 text-white" @click="updateTodo()">Update</button>
                             </div>
                         </div>
+
+                        <button class="btn bg-red-500 hover:bg-red-400 text-white" @click="resetTodo()">Reset</button>
 
                         <table class="table table-bordered mt-3">
                             <thead>
@@ -26,7 +29,8 @@
                                     <td>{{ ++index }}</td>
                                     <td>{{ todo.name }}</td>
                                     <td>
-                                        <button class="btn bg-red-500 hover:bg-red-400 text-white"> Delete </button>
+                                        <button class="btn bg-sky-700 hover:bg-sky-500 text-white m-2" @click="editTodo(--index)"> Edit </button>
+                                        <button class="btn bg-red-500 hover:bg-red-400 text-white" @click="deleteTodo(--index)"> Delete </button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -45,7 +49,9 @@
             return {
                 todos:[],
                 api: 'http://localhost:8000/api/todos',
-                todo_input: ''
+                todo_input: '',
+                edit_todo_id: '',
+                edit_todo_index: '',
             }
         },
         mounted() {
@@ -59,6 +65,35 @@
                     let data = {'name': this.todo_input}
                     this.axios.post(this.api,data).then((response) => {
                         this.todos.push(response.data);
+                        this.todo_input = '';
+                    });
+                }
+            },
+            editTodo(index) {
+                if(this.todos[index].id){
+                    this.todo_input = this.todos[index].name;
+                    this.edit_todo_id = this.todos[index].id;
+                    this.edit_todo_index = index;
+                }
+            },
+            updateTodo() {
+                if(this.todo_input.length > 0){
+                    let data = {'name': this.todo_input}
+                    this.axios.patch(this.api+'/'+this.todos[this.edit_todo_index].id,data).then((response) => {
+                        this.todos[this.edit_todo_index].name = response.data.name;
+                        this.resetTodo();
+                    });
+                }
+            },
+            resetTodo() {
+                this.todo_input = '';
+                this.edit_todo_id = '';
+                this.edit_todo_index = '';
+            },
+            deleteTodo(index) {
+                if(this.todos[index].id){
+                    this.axios.delete(this.api+'/'+this.todos[index].id).then(response=>{
+                        this.todos.splice(index,1);
                     });
                 }
             }

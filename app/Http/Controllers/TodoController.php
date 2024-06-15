@@ -53,7 +53,8 @@ class TodoController extends Controller
      */
     public function update(Request $request, Todo $todo)
     {
-        //
+        $todo->update($request->all());
+        return response()->json($todo);
     }
 
     /**
@@ -61,6 +62,7 @@ class TodoController extends Controller
      */
     public function destroy(Todo $todo)
     {
-        //
+        $todo->delete();
+        return response()->json('Successfully Deleted');
     }
 }
