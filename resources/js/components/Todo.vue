@@ -9,28 +9,31 @@
                         <div class="input-group">
                             <input type="text" placeholder="ToDo.." class="form-control" aria-lable="todo" aria-describedby="todo" v-model="todo_input">
                             <div class="input-group-append">
-                                <button v-if="!edit_todo_id" class="btn bg-teal-500 hover:bg-teal-400 text-white" @click="savaTodo()">Add</button>
+                                <button v-if="!edit_todo_id" class="btn bg-teal-500 hover:bg-teal-400 text-white" @click="savaTodo()"><i class="las la-plus-circle" style="font-size: 24px;"></i></button>
                                 <button v-else class="btn bg-teal-500 hover:bg-teal-400 text-white" @click="updateTodo()">Update</button>
                             </div>
                         </div>
 
-                        <button class="btn bg-red-500 hover:bg-red-400 text-white" @click="resetTodo()">Reset</button>
+                        <button class="mt-2 btn bg-red-500 hover:bg-red-700 text-white" @click="resetTodo()"><i class="las la-redo-alt" style="font-size: 20px;"></i></button>
 
                         <table class="table table-bordered mt-3">
-                            <thead>
+                            <thead class="text-center">
                                 <tr>
                                 <th scope="col">Sl No.</th>
                                 <th scope="col">Name</th>
+                                <th scope="col">Status</th>
                                 <th scope="col">Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="text-center">
                                 <tr v-for="(todo,index) in todos" :key="index">
                                     <td>{{ ++index }}</td>
                                     <td>{{ todo.name }}</td>
+                                    <td>{{ todo.status }}</td>
                                     <td>
-                                        <button class="btn bg-sky-700 hover:bg-sky-500 text-white m-2" @click="editTodo(--index)"> Edit </button>
-                                        <button class="btn bg-red-500 hover:bg-red-400 text-white" @click="deleteTodo(--index)"> Delete </button>
+                                        <button class="btn bg-emerald-500 hover:bg-emerald-700 text-white" @click="editTodo(--index)"> <i class="las la-check-circle" style="font-size: 20px;"></i> </button>
+                                        <button class="btn bg-sky-700 hover:bg-sky-500 text-white m-2" @click="editTodo(--index)"> <i class="las la-edit" style="font-size: 20px;"></i> </button>
+                                        <button class="btn bg-red-500 hover:bg-red-700 text-white" @click="deleteTodo(--index)"> <i class="las la-trash" style="font-size: 20px;"></i> </button>
                                     </td>
                                 </tr>
                             </tbody>
