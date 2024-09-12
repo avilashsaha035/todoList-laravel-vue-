@@ -29,9 +29,10 @@
                                 <tr v-for="(todo,index) in todos" :key="index">
                                     <td>{{ ++index }}</td>
                                     <td>{{ todo.name }}</td>
-                                    <td>{{ todo.status }}</td>
+                                    <td v-if="todo.status === 'pending'"><i class="las la-hourglass-start" style="font-size: 24px; color: #ffa31e; box-shadow: #222f29 7px 5px 18px -5px"></i></td>
+                                    <td v-if="todo.status === 'completed'"><i class="las la-clipboard-check" style="font-size: 24px; color: #00b92a; box-shadow: rgb(134 146 140) 7px 6px 17px -5px;"></i></td>
                                     <td>
-                                        <button class="btn bg-emerald-500 hover:bg-emerald-700 text-white" @click="editTodo(--index)"> <i class="las la-check-circle" style="font-size: 20px;"></i> </button>
+                                        <button class="btn bg-emerald-500 hover:bg-emerald-700 text-white" @click="completeTodo(--index)" v-if="todo.status === 'pending'"> <i class="las la-check-circle" style="font-size: 20px;"></i> </button>
                                         <button class="btn bg-sky-700 hover:bg-sky-500 text-white m-2" @click="editTodo(--index)"> <i class="las la-edit" style="font-size: 20px;"></i> </button>
                                         <button class="btn bg-red-500 hover:bg-red-700 text-white" @click="deleteTodo(--index)"> <i class="las la-trash" style="font-size: 20px;"></i> </button>
                                     </td>
@@ -65,7 +66,7 @@
         methods:{
             savaTodo() {
                 if(this.todo_input.length > 0){
-                    let data = {'name': this.todo_input}
+                    let data = {'name': this.todo_input, 'status': 'pending'}
                     this.axios.post(this.api,data).then((response) => {
                         this.todos.push(response.data);
                         this.todo_input = '';
@@ -77,6 +78,13 @@
                     this.todo_input = this.todos[index].name;
                     this.edit_todo_id = this.todos[index].id;
                     this.edit_todo_index = index;
+                }
+            },
+            completeTodo(index) {
+                if(this.todos[index].id){
+                    this.axios.patch(this.api+'/'+this.todos[index].id, { status: 'completed' }).then(response => {
+                        this.todos[index].status = 'completed';
+                    });
                 }
             },
             updateTodo() {
